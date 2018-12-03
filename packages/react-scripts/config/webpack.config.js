@@ -112,15 +112,25 @@ module.exports = function(webpackEnv) {
         },
       },
     ].filter(Boolean);
+
     if (preProcessor) {
       loaders.push({
-        loader: require.resolve(preProcessor),
+        loader: require.resolve(preProcessor.loader || preProcessor),
         options: {
+          ...(preProcessor.options || {}),
           sourceMap: isEnvProduction && shouldUseSourceMap,
         },
       });
     }
+
     return loaders;
+  };
+
+  const sassLoader = {
+    loader: 'sass-loader',
+    options: {
+      data: `@import '~@/scss/index.scss';`,
+    },
   };
 
   return {
@@ -275,6 +285,7 @@ module.exports = function(webpackEnv) {
         // Support React Native Web
         // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
         'react-native': 'react-native-web',
+        '@': paths.appSrc,
       },
       plugins: [
         // Adds support for installing with Plug'n'Play, leading to faster installs and adding
@@ -473,7 +484,7 @@ module.exports = function(webpackEnv) {
                   importLoaders: 2,
                   sourceMap: isEnvProduction && shouldUseSourceMap,
                 },
-                'sass-loader'
+                sassLoader
               ),
               // Don't consider CSS imports dead code even if the
               // containing package claims to have no side effects.
@@ -492,7 +503,7 @@ module.exports = function(webpackEnv) {
                   modules: true,
                   getLocalIdent: getCSSModuleLocalIdent,
                 },
-                'sass-loader'
+                sassLoader
               ),
             },
             // "file" loader makes sure those assets get served by WebpackDevServer.
