@@ -2,14 +2,16 @@
 
 const fs = require('fs');
 const paths = require('../config/paths');
+const appPackage = require(paths.appPackageJson);
+const useTypeScript = appPackage.dependencies['typescript'] != null;
 
-const name = process.argv[2];
+const name = process.argv[2].replace(/^\w/, function(chr) {
+  return chr.toUpperCase();
+});
 const dir = `${paths.appSrc}/components/${name}`;
 
-const trim = str => str.trim().replace(/^ {2}/gm, '');
-
 const write = (path, content) => {
-  fs.writeFileSync(path, trim(content), 'utf-8');
+  fs.writeFileSync(path, content.trim().replace(/^ {2}/gm, ''), 'utf-8');
 };
 
 if (!fs.existsSync(dir)) {
@@ -17,13 +19,12 @@ if (!fs.existsSync(dir)) {
 }
 
 const index = `
-  import ${name} from './${name}';
   import './${name}.scss';
   
-  export default ${name};
+  export * from './${name}';
   `;
 
-const jsx = `
+const reactComponent = `
   import React from 'react';
   
   export default function ${name}() {
@@ -39,5 +40,5 @@ const jsx = `
 const scss = '';
 
 write(`${dir}/index.js`, index);
-write(`${dir}/${name}.jsx`, jsx);
+write(`${dir}/${name}.${useTypeScript ? 'tsx' : 'jsx'}`, reactComponent);
 write(`${dir}/${name}.scss`, scss);

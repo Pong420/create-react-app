@@ -24,7 +24,7 @@ const scriptIndex = args.findIndex(
     x === 'eject' ||
     x === 'start' ||
     x === 'test' ||
-    x === 'components'
+    x === 'component'
 );
 const script = scriptIndex === -1 ? args[0] : args[scriptIndex];
 const nodeArgs = scriptIndex > 0 ? args.slice(0, scriptIndex) : [];
@@ -33,7 +33,7 @@ switch (script) {
   case 'build':
   case 'eject':
   case 'start':
-  case 'components':
+  case 'component':
   case 'test': {
     const result = spawn.sync(
       'node',
