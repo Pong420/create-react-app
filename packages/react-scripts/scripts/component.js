@@ -27,7 +27,7 @@ const index = `
 const reactComponent = `
   import React from 'react';
   
-  export default function ${name}() {
+  export function ${name}() {
     return (
       <div className="${name
         .split(/(?=[A-Z])/)
