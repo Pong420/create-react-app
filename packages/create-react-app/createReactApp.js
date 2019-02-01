@@ -397,7 +397,9 @@ function run(
       console.log(
         `Installing ${chalk.cyan('react')}, ${chalk.cyan(
           'react-dom'
-        )}, and ${chalk.cyan(packageName)}...`
+        )}, ${chalk.cyan(
+          'react-router-dom'
+        )} and ${chalk.cyan(packageName)}...`
       );
       console.log();
 
