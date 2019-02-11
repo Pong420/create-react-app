@@ -370,14 +370,13 @@ function run(
   useTypescript
 ) {
   const packageToInstall = getInstallPackage(version, originalDirectory);
-  const allDependencies = ['react', 'react-dom', 'react-router-dom', packageToInstall];
+  const allDependencies = ['react', 'react-dom', packageToInstall];
   if (useTypescript) {
     // TODO: get user's node version instead of installing latest
     allDependencies.push(
       '@types/node',
       '@types/react',
       '@types/react-dom',
-      '@types/react-router-dom',
       '@types/jest',
       'typescript'
     );
@@ -397,9 +396,7 @@ function run(
       console.log(
         `Installing ${chalk.cyan('react')}, ${chalk.cyan(
           'react-dom'
-        )}, ${chalk.cyan(
-          'react-router-dom'
-        )} and ${chalk.cyan(packageName)}...`
+        )}, and ${chalk.cyan(packageName)}...`
       );
       console.log();
 
