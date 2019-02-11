@@ -90,6 +90,17 @@ module.exports = function(
 
   // Copy over some of the devDependencies
   appPackage.dependencies = appPackage.dependencies || {};
+  appPackage.devDependencies = appPackage.devDependencies || {};
+
+  appPackage.dependencies = {
+    ...appPackage.dependencies,
+    'react-router-dom': '4.3.1',
+  };
+
+  appPackage.devDependencies = {
+    ...appPackage.devDependencies,
+    'node-sass': '4.11.0',
+  };
 
   const useTypeScript = appPackage.dependencies['typescript'] != null;
 
@@ -165,7 +176,7 @@ module.exports = function(
     command = 'npm';
     args = ['install', '--save', verbose && '--verbose'].filter(e => e);
   }
-  args.push('react', 'react-dom', 'react-router-dom');
+  args.push('react', 'react-dom');
 
   // Install additional template dependencies, if present
   const templateDependenciesPath = path.join(
