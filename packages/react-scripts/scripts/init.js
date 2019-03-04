@@ -90,7 +90,8 @@ module.exports = function(
 
   // Copy over some of the devDependencies
   appPackage.dependencies = appPackage.dependencies || {};
-  appPackage.devDependencies = appPackage.devDependencies || {};
+
+  const useTypeScript = appPackage.dependencies['typescript'] != null;
 
   appPackage.dependencies = {
     ...appPackage.dependencies,
@@ -102,15 +103,12 @@ module.exports = function(
     'node-sass': '4.11.0',
   };
 
-  const useTypeScript = appPackage.dependencies['typescript'] != null;
-
   // Setup the script rules
   appPackage.scripts = {
     start: 'react-scripts start',
     build: 'react-scripts build',
     test: 'react-scripts test',
     eject: 'react-scripts eject',
-    component: 'react-scripts component',
   };
 
   // Setup the eslint config
@@ -138,8 +136,11 @@ module.exports = function(
   const templatePath = template
     ? path.resolve(originalDirectory, template)
     : path.join(ownPath, useTypeScript ? 'template-typescript' : 'template');
+  const commonTemplatePath = path.join(ownPath, 'template-common');
+  
   if (fs.existsSync(templatePath)) {
     fs.copySync(templatePath, appPath);
+    fs.copySync(commonTemplatePath, appPath);
   } else {
     console.error(
       `Could not locate supplied template: ${chalk.green(templatePath)}`
