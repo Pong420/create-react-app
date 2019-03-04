@@ -16,8 +16,7 @@
     "screencast:error": "svg-term --cast jyu19xGl88FQ3poMY8Hbmfw8y --out screencast-error.svg --window --at 12000 --no-cursor",
     "test": "cd packages/react-scripts && node bin/react-scripts.js test",
     "format": "prettier --trailing-comma es5 --single-quote --write 'packages/*/*.js' 'packages/*/!(node_modules)/**/*.js'",
-    "compile:lockfile": "node tasks/compile-lockfile.js",
-    "component": "cd packages/react-scripts && node bin/react-scripts.js component"
+    "compile:lockfile": "node tasks/compile-lockfile.js"
   },
   "devDependencies": {
     "eslint": "5.12.0",

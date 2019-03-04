@@ -136,14 +136,23 @@ module.exports = function(
   const templatePath = template
     ? path.resolve(originalDirectory, template)
     : path.join(ownPath, useTypeScript ? 'template-typescript' : 'template');
-  const commonTemplatePath = path.join(ownPath, 'template-common');
-  
+
   if (fs.existsSync(templatePath)) {
     fs.copySync(templatePath, appPath);
-    fs.copySync(commonTemplatePath, appPath);
   } else {
     console.error(
       `Could not locate supplied template: ${chalk.green(templatePath)}`
+    );
+    return;
+  }
+
+  const commonTemplatePath = path.join(ownPath, 'template-common');
+
+  if (fs.existsSync(commonTemplatePath)) {
+    fs.copySync(commonTemplatePath, appPath);
+  } else {
+    console.error(
+      `Could not locate supplied template: ${chalk.green(commonTemplatePath)}`
     );
     return;
   }
