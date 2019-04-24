@@ -121,8 +121,9 @@ module.exports = function(webpackEnv) {
     ].filter(Boolean);
     if (preProcessor) {
       loaders.push({
-        loader: require.resolve(preProcessor),
+        loader: require.resolve(preProcessor.loader || preProcessor),
         options: {
+          ...(preProcessor.options || {}),
           sourceMap: isEnvProduction && shouldUseSourceMap,
         },
       });
@@ -130,6 +131,12 @@ module.exports = function(webpackEnv) {
     return loaders;
   };
 
+  const sassLoader = {
+    loader: 'sass-loader',
+    options: {
+      data: `@import '${paths.appSrc}/scss/index.scss';`,
+    },
+  };
   return {
     mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
     // Stop compilation early in production
@@ -269,7 +276,9 @@ module.exports = function(webpackEnv) {
       // We placed these paths second because we want `node_modules` to "win"
       // if there are any conflicts. This matches Node resolution mechanism.
       // https://github.com/facebook/create-react-app/issues/253
-      modules: ['node_modules', paths.appNodeModules].concat(modules.additionalModulePaths || []),
+      modules: ['node_modules', paths.appNodeModules].concat(
+        modules.additionalModulePaths || []
+      ),
       // These are the reasonable defaults supported by the Node ecosystem.
       // We also include JSX as a common component filename extension to support
       // some tools, although we do not recommend using it, see:
@@ -479,7 +488,7 @@ module.exports = function(webpackEnv) {
                   importLoaders: 2,
                   sourceMap: isEnvProduction && shouldUseSourceMap,
                 },
-                'sass-loader'
+                sassLoader
               ),
               // Don't consider CSS imports dead code even if the
               // containing package claims to have no side effects.
@@ -498,7 +507,7 @@ module.exports = function(webpackEnv) {
                   modules: true,
                   getLocalIdent: getCSSModuleLocalIdent,
                 },
-                'sass-loader'
+                sassLoader
               ),
             },
             // "file" loader makes sure those assets get served by WebpackDevServer.
@@ -654,16 +663,18 @@ module.exports = function(webpackEnv) {
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.
     // Tell Webpack to provide empty mocks for them so importing them works.
-    node: {
-      module: 'empty',
-      dgram: 'empty',
-      dns: 'mock',
-      fs: 'empty',
-      http2: 'empty',
-      net: 'empty',
-      tls: 'empty',
-      child_process: 'empty',
-    },
+    node: process.env.ELECTRON
+      ? undefined
+      : {
+          module: 'empty',
+          dgram: 'empty',
+          dns: 'mock',
+          fs: 'empty',
+          net: 'empty',
+          tls: 'empty',
+          child_process: 'empty',
+        },
+    target: process.env.ELECTRON ? 'electron-renderer' : 'web',
     // Turn off performance processing because we utilize
     // our own hints via the FileSizeReporter
     performance: false,
