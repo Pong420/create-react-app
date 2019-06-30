@@ -131,7 +131,8 @@ module.exports = function(webpackEnv) {
   const sassLoader = {
     loader: 'sass-loader',
     options: {
-      data: `@import '${paths.appSrc}/scss/index.scss';`,
+      data: `@import 'scss/index.scss';`,
+      includePaths: [paths.appSrc],
     },
   };
   return {
