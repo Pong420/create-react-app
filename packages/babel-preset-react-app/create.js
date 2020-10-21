@@ -194,15 +194,12 @@ module.exports = function(api, opts, env) {
           removeImport: true,
         },
       ],
-      // Adds syntax support for import()
-      require('@babel/plugin-syntax-dynamic-import').default,
-      // Adds syntax support for optional chaining (.?)
+      // Optional chaining and nullish coalescing are supported in @babel/preset-env,
+      // but not yet supported in webpack due to support missing from acorn.
+      // These can be removed once webpack has support.
+      // See https://github.com/facebook/create-react-app/issues/8445#issuecomment-588512250
       require('@babel/plugin-proposal-optional-chaining').default,
-      // Adds syntax support for default value using ?? operator
       require('@babel/plugin-proposal-nullish-coalescing-operator').default,
-      isEnvTest &&
-        // Transform dynamic import to require
-        require('babel-plugin-dynamic-import-node'),
     ].filter(Boolean),
     overrides: [
       isFlowEnabled && {
