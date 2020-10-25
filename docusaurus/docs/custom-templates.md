@@ -58,7 +58,11 @@ You can add whatever files you want in here, but you must have at least the file
 
 ### The `template.json` file
 
-This is where you can define dependencies (only dependencies are supported for now), as well as any custom scripts that your template relies on.
+This is the configuration file for your template. As this is a new feature, more options will be added over time. For now, only a `package` key is supported.
+
+The `package` key lets you provide any keys/values that you want added to the new project's `package.json`, such as dependencies and any custom scripts that your template relies on.
+
+Below is an example `template.json` file:
 
 ```json
 {
